@@ -1,0 +1,11 @@
+---
+memory: 1G
+instances: 1
+env:
+  TRUST_CERTS: api.run.pivotal.io
+applications:
+- name: student-service-n
+  path: target/StudentService-1.0-SNAPSHOT.jar
+  services:
+  - student-mysql
+  - student-log-drain

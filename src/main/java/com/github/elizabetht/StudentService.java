@@ -4,11 +4,15 @@ import com.github.elizabetht.model.Error;
 import com.github.elizabetht.model.Student;
 import com.github.elizabetht.model.StudentResponse;
 import com.github.elizabetht.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
 public class StudentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StudentService.class);
 
     private final StudentRepository studentRepository;
 
@@ -22,6 +26,7 @@ public class StudentService {
             studentRepository.save(student);
             response.setStatus("Success");
         } catch (DataAccessException ex) {
+
             response.setStatus("Failure");
             response.setError(getErrorMessage(ex));
         }
@@ -43,9 +48,11 @@ public class StudentService {
             if(!StringUtils.isEmpty(user)) {
                 response.setStudentResult(true);
             } else {
+                LOG.warn("findByLogin result false");
                 response.setStudentResult(false);
             }
         } catch (DataAccessException ex) {
+            LOG.error("Exception in service findByUserName ", ex);
             response.setStatus("Failure");
             response.setError(getErrorMessage(ex));
         }
@@ -60,9 +67,11 @@ public class StudentService {
             if(!StringUtils.isEmpty(userPwd) && userPwd.equals(user.getPassword())){
                 response.setStudentResult(true);
             } else {
+                LOG.warn("findByLogin result false");
                 response.setStudentResult(false);
             }
         } catch (DataAccessException ex) {
+            LOG.error("Exception in service findByLogin ", ex);
             response.setStatus("Failure");
             response.setError(getErrorMessage(ex));
         }
